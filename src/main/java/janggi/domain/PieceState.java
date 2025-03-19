@@ -2,8 +2,10 @@ package janggi.domain;
 
 import janggi.common.ErrorMessage;
 import janggi.domain.piece.Side;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PieceState {
 
@@ -28,16 +30,19 @@ public class PieceState {
     }
 
     public void move(Position movePosition) {
-        Set<Position> availableMovePositions = getAvailableMovePositions();
+        Set<Position> positions = piece.availableMovePositions(position)
+                .stream()
+                .map(Route::getFinalPosition)
+                .collect(Collectors.toUnmodifiableSet());
 
-        if (!availableMovePositions.contains(movePosition)) {
+        if (!positions.contains(movePosition)) {
             throw new IllegalArgumentException(ErrorMessage.CANNOT_MOVE_PIECE.getMessage());
         }
 
         updatePosition(movePosition);
     }
 
-    public Set<Position> getAvailableMovePositions() {
+    public List<Route> getAvailableMoveRoutes() {
         return piece.availableMovePositions(position);
     }
 
@@ -69,5 +74,9 @@ public class PieceState {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Side getSide() {
+        return piece.getSide();
     }
 }

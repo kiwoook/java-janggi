@@ -2,7 +2,8 @@ package janggi.domain.piece;
 
 import janggi.domain.Board;
 import janggi.domain.Position;
-import java.util.HashSet;
+import janggi.domain.Route;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,40 +21,33 @@ public class Chariot implements PieceBehavior {
         return "차";
     }
 
-    @Override
-    public Set<Position> generateMovePosition(Side side, Position position) {
-        return Set.of();
-    }
-
-    @Override
-    public Set<Position> generateMovePosition(Board board, Side side, Position position) {
-        Set<Position> result = new HashSet<>();
+    public List<Route> generateMovePosition(Side side, Position position) {
+        List<Route> routes = new ArrayList<>();
         for (Vector vector : VECTORS) {
+            List<Position> route = new ArrayList<>();
             position.calculate(vector)
                     .ifPresent(movePosition ->
-                            dfs(result, board, movePosition, vector, side));
+                            dfs(route, movePosition, vector, side));
+
+            routes.add(new Route(route));
         }
 
-        return result;
+        return routes;
     }
 
-    public void dfs(Set<Position> result, Board board, Position currentPosition, Vector vector, Side side) {
-        if (board.hasPosition(currentPosition)) {
-            processBySide(result, board, currentPosition, side);
-            return;
-        }
+    public void dfs(List<Position> route, Position currentPosition, Vector vector, Side side) {
 
-        result.add(currentPosition);
+        route.add(currentPosition);
 
         Optional<Position> calculate = currentPosition.calculate(vector);
         if (calculate.isEmpty()) {
             return;
         }
 
-        dfs(result, board, calculate.get(), vector, side);
+        dfs(route, calculate.get(), vector, side);
     }
 
-    private void processBySide(Set<Position> result, Board board, Position currentPosition, Side side) {
+    private void addPositionIfNotSameSide(Set<Position> result, Board board, Position currentPosition, Side side) {
         if (board.isSameSide(side, currentPosition)) {
             return;
         }

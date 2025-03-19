@@ -8,7 +8,7 @@ import janggi.common.ErrorMessage;
 import janggi.domain.piece.PieceBehavior;
 import janggi.domain.piece.Side;
 import janggi.domain.piece.Soldier;
-import janggi.factory.PieceFactory;
+import janggi.factory.PieceStateFactory;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +20,9 @@ class BoardTest {
     @Test
     void test1() {
         // given
-        Map<Position, PieceState> initialize = PieceFactory.initialize();
+        Map<Position, PieceState> initialize = PieceStateFactory.initialize();
 
-        PieceBehavior pieceBehavior = PieceFactory.GENERAL1.getPieceBehavior();
+        PieceBehavior pieceBehavior = PieceStateFactory.GENERAL1.getPieceBehavior();
         Board board = new Board(initialize);
         Position position = Position.of(9, 5);
 
@@ -38,7 +38,7 @@ class BoardTest {
     @Test
     void test2() {
         // given
-        Map<Position, PieceState> initialize = PieceFactory.initialize();
+        Map<Position, PieceState> initialize = PieceStateFactory.initialize();
         Board board = new Board(initialize);
         Position position = Position.of(2, 1);
 
@@ -52,7 +52,7 @@ class BoardTest {
     @Test
     void test3() {
         // given
-        Map<Position, PieceState> initialize = PieceFactory.initialize();
+        Map<Position, PieceState> initialize = PieceStateFactory.initialize();
 
         Board board = new Board(initialize);
         Position position = Position.of(1, 1);
@@ -67,13 +67,13 @@ class BoardTest {
     @Test
     void test4() {
         // given
-        Position position = Position.of(5, 1);
+        Position position = Position.of(7, 1);
         PieceState soldier = new PieceState(position, new Piece(Side.CHO, new Soldier()));
         Map<Position, PieceState> map = Map.of(position, soldier);
 
         Board board = new Board(new HashMap<>(map));
 
-        Position newPosition = Position.of(4, 1);
+        Position newPosition = Position.of(6, 1);
 
         // when & then
         assertThatCode(() -> board.move(soldier, newPosition))

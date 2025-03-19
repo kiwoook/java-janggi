@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import janggi.common.ErrorMessage;
 import janggi.domain.piece.Side;
 import janggi.domain.piece.Soldier;
+import janggi.factory.PieceStateFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

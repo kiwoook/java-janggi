@@ -2,7 +2,9 @@ package janggi.domain.piece;
 
 import janggi.domain.Board;
 import janggi.domain.Position;
+import janggi.domain.Route;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Elephant implements PieceBehavior {
@@ -13,12 +15,8 @@ public class Elephant implements PieceBehavior {
     }
 
     @Override
-    public Set<Position> generateMovePosition(Side side, Position position) {
-        return new HashSet<>();
+    public List<Route> generateMovePosition(Side side, Position position) {
+        return List.of();
     }
 
-    @Override
-    public Set<Position> generateMovePosition(Board board, Side side, Position position) {
-        return Set.of();
-    }
 }

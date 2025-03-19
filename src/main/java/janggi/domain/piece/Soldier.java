@@ -1,33 +1,57 @@
 package janggi.domain.piece;
 
-import janggi.domain.Board;
 import janggi.domain.Position;
+import janggi.domain.Route;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Soldier implements PieceBehavior {
 
-    private static final List<Vector> VECTORS = List.of(new Vector(1, 0), new Vector(0, -1), new Vector(0, 1));
+    private static final List<List<Vector>> VECTORS_LIST = List.of(List.of(new Vector(1, 0)),
+            List.of(new Vector(0, -1)),
+            List.of(new Vector(0, 1)));
 
     @Override
     public String toName() {
         return "병";
     }
 
-    @Override
-    public Set<Position> generateMovePosition(Side side, Position position) {
-        return VECTORS.stream()
-                .map(vector -> vector.side(side))
-                .map(position::calculate)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toUnmodifiableSet());
-    }
+//    public Set<Position> generateMovePosition(Board board, Side side, Position position) {
+//        Set<Position> result = new HashSet<>();
+//
+//        for (Vector vector : VECTORS) {
+//            position.calculate(vector.side(side))
+//                    .ifPresent(movePosition -> addPosition(board, side, movePosition, result)
+//                    );
+//        }
+//
+//        return result;
+//    }
 
     @Override
-    public Set<Position> generateMovePosition(Board board, Side side, Position position) {
-        return Set.of();
+    public List<Route> generateMovePosition(Side side, Position position) {
+        List<Route> routes = new ArrayList<>();
+        for (List<Vector> vectors : VECTORS_LIST) {
+            // new Route 생성을 위한 Positions
+            List<Position> positions = new ArrayList<>();
+            for (Vector vector : vectors) {
+                Vector newVector = vector.side(side);
+                Optional<Position> newPosition = position.calculate(newVector);
+                newPosition.ifPresent(positions::add);
+            }
+
+            if (positions.isEmpty()) {
+                continue;
+            }
+            routes.add(new Route(positions));
+        }
+        return routes;
     }
+
+//    private void addPosition(Board board, Side side, Position movePosition, Set<Position> result) {
+//        if (!board.hasPosition(movePosition) || !board.isSameSide(side, movePosition)) {
+//            result.add(movePosition);
+//        }
+//    }
 }

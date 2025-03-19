@@ -1,10 +1,10 @@
 package janggi.domain;
 
+import janggi.domain.piece.Cannon;
 import janggi.domain.piece.PieceBehavior;
 import janggi.domain.piece.Side;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Piece {
 
@@ -16,8 +16,8 @@ public class Piece {
         this.pieceBehavior = pieceBehavior;
     }
 
-    public Set<Position> availableMovePositions(Position currentPosition) {
-        return pieceBehavior.generateMovePosition(this.side, currentPosition);
+    public List<Route> availableMovePositions(Position currentPosition) {
+        return pieceBehavior.generateMovePosition(side, currentPosition);
     }
 
     public String toName() {
@@ -27,12 +27,20 @@ public class Piece {
         return "\u001B[31m" + pieceBehavior.toName() + "\u001B[0m";
     }
 
-    public boolean isSameSide(Piece other){
+    public boolean isCannon() {
+        return pieceBehavior.getClass() == Cannon.class;
+    }
+
+    public boolean isSameSide(Piece other) {
         return isSameSide(other.side);
     }
 
     public boolean isSameSide(Side side) {
         return this.side == side;
+    }
+
+    public Side getSide() {
+        return side;
     }
 
     @Override

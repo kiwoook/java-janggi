@@ -15,7 +15,7 @@ import janggi.domain.piece.Soldier;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PieceFactory {
+public enum PieceStateFactory {
     GENERAL1(Side.CHO, 9, 5, new General()),
     GUARD1(Side.CHO, 10, 4, new Guard()),
     GUARD2(Side.CHO, 10, 6, new Guard()),
@@ -56,7 +56,7 @@ public enum PieceFactory {
     private final int column;
     private final PieceBehavior pieceBehavior;
 
-    PieceFactory(Side side, int row, int column, PieceBehavior pieceBehavior) {
+    PieceStateFactory(Side side, int row, int column, PieceBehavior pieceBehavior) {
         this.side = side;
         this.row = row;
         this.column = column;
@@ -66,7 +66,7 @@ public enum PieceFactory {
     public static Map<Position, PieceState> initialize() {
         Map<Position, PieceState> map = new HashMap<>();
 
-        for (PieceFactory value : PieceFactory.values()) {
+        for (PieceStateFactory value : PieceStateFactory.values()) {
             Position position = Position.of(value.row, value.column);
             Piece piece = new Piece(value.side, value.pieceBehavior);
             PieceState pieceState = new PieceState(position, piece);

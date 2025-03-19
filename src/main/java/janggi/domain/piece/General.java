@@ -1,8 +1,8 @@
 package janggi.domain.piece;
 
-import janggi.domain.Board;
 import janggi.domain.Position;
-import java.util.Set;
+import janggi.domain.Route;
+import java.util.List;
 
 public class General implements PieceBehavior {
 
@@ -12,12 +12,8 @@ public class General implements PieceBehavior {
     }
 
     @Override
-    public Set<Position> generateMovePosition(Side side, Position position) {
-        return Set.of();
+    public List<Route> generateMovePosition(Side side, Position position) {
+        return List.of();
     }
 
-    @Override
-    public Set<Position> generateMovePosition(Board board, Side side, Position position) {
-        return Set.of();
-    }
 }

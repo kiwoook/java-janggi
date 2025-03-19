@@ -4,6 +4,8 @@ import janggi.common.ErrorMessage;
 import janggi.domain.piece.Side;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -45,22 +47,19 @@ public class Board {
     }
 
     public void move(PieceState pieceState, Position newPosition) {
+        List<Route> routes = pieceState.getAvailableMoveRoutes();
         Position currentPosition = pieceState.getPosition();
 
-        List<Position> availablePositions = pieceState.getAvailableMovePositions()
-                .stream()
-                .filter(position -> {
-                    PieceState pieceAtPosition = pieceStates.get(position);
-                    return pieceAtPosition == null || !pieceState.isSameSide(pieceAtPosition);
-                })
-                .toList();
+        Set<Position> availableMovePositions = routes.stream()
+                .filter(route -> route.isAvailablePositions(this, pieceState.getSide()))
+                .map(Route::getFinalPosition)
+                .collect(Collectors.toUnmodifiableSet());
 
-        if (!availablePositions.contains(newPosition)) {
+        if (!availableMovePositions.contains(newPosition)) {
             throw new IllegalArgumentException(ErrorMessage.CANNOT_MOVE_PIECE.getMessage());
         }
 
-        pieceState.move(newPosition);
-
+        pieceState.move( newPosition);
         pieceStates.remove(currentPosition);
         pieceStates.put(newPosition, pieceState);
     }
